@@ -51,3 +51,35 @@ class BankAccount:
     
 # Aufgabe: Erstellen Sie ein neues Jugendbankkonto, dass von der Klasse 
 # BankAccount erbt und beschränken sie die Abhebungen auf maximal 25€.
+
+class jugend(BankAccount):
+    def __init__(self, inhaber: str, kontonummer: str, start_kontostand: float = 0.0):
+        super().__init__(inhaber,kontonummer,start_kontostand)
+        print("Ein neues Jugendkonto wurde eröffnet")
+
+    def abheben(self, betrag: float) -> None:
+        """Verringert den Kontostand um den abgehobenen Betrag, wenn genügend Guthaben vorhanden ist."""
+        if betrag > 0 and betrag < 25.0:
+            if self._kontostand >= betrag:
+                self._kontostand -= betrag
+                self._transaktionen.append(("Abhebung", betrag))
+                print(f"{betrag} EUR wurden abgehoben.")
+            else:
+                raise ValueError("Abhebung fehlgeschlagen: Unzureichendes Guthaben.")
+        else:
+            raise ValueError("Abhebung fehlgeschlagen")
+        
+    def __str__(self) -> str:
+        """Gibt eine benutzerfreundliche Darstellung des Kontos zurück."""
+        return (
+            f"Jugendkonto von {self.inhaber}\n"
+            f"Kontonummer: {self.kontonummer}\n"
+            f"Aktueller Kontostand: {self._kontostand:.2f} EUR")
+
+tina=jugend("tina","1223",20.0)
+martin=BankAccount("martin", "344", 34.9)
+tina.einzahlen(30.0)
+tina.abheben(20.0)
+tina.get_transaktionen()
+print(tina)
+print(martin)
