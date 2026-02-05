@@ -59,15 +59,10 @@ class jugend(BankAccount):
 
     def abheben(self, betrag: float) -> None:
         """Verringert den Kontostand um den abgehobenen Betrag, wenn genügend Guthaben vorhanden ist."""
-        if betrag > 0 and betrag < 25.0:
-            if self._kontostand >= betrag:
-                self._kontostand -= betrag
-                self._transaktionen.append(("Abhebung", betrag))
-                print(f"{betrag} EUR wurden abgehoben.")
-            else:
-                raise ValueError("Abhebung fehlgeschlagen: Unzureichendes Guthaben.")
+        if betrag <= 25.0:
+            super().abheben(betrag)
         else:
-            raise ValueError("Abhebung fehlgeschlagen")
+            raise ValueError("maximal 25")
         
     def __str__(self) -> str:
         """Gibt eine benutzerfreundliche Darstellung des Kontos zurück."""
@@ -79,7 +74,11 @@ class jugend(BankAccount):
 tina=jugend("tina","1223",20.0)
 martin=BankAccount("martin", "344", 34.9)
 tina.einzahlen(30.0)
-tina.abheben(20.0)
+
+try:
+    tina.abheben(21.0)
+except ValueError as e:
+    print(e)
 tina.get_transaktionen()
 print(tina)
 print(martin)
